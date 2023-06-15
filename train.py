@@ -1,5 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 ####### DATA PREPROCESSING
 
@@ -14,4 +15,8 @@ labels = dataset.iloc[:, -1] # column to predict
 # split features and labels each into training and test sets
 X_train, X_tests, y_train, y_test = train_test_split(features, labels, test_size=0.35, random_state=42)
 
-print(y_test)
+
+# standardize features so that they have equal weights
+sc = StandardScaler()
+X_train_scale = sc.fit_transform(X_train)
+X_test_scale = sc.fit(X_tests)
