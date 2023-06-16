@@ -42,7 +42,9 @@ def design_model(features_set):
     model.add(input)
     # hidden layers
     model.add(layers.Dense(16, activation="relu"))
+    model.add(layers.Dropout(0.1))
     model.add(layers.Dense(8, activation="relu"))
+    model.add(layers.Dropout(0.2))
     # output layer
     model.add(layers.Dense(1))
     opt = Adam(learning_rate)
