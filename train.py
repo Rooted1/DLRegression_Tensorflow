@@ -10,6 +10,7 @@ from tensorflow.keras import layers
 from tensorflow.keras.optimizers.legacy import Adam
 import matplotlib.pyplot as plt
 from tensorflow.keras.callbacks import EarlyStopping
+from sklearn.metrics import r2_score
 
 ####### DATA PREPROCESSING
 
@@ -60,6 +61,11 @@ history = model.fit(X_train_scale, y_train.to_numpy(), epochs=epochs, batch_size
 res_mse, res_mae = model.evaluate(X_test_scale, y_test.to_numpy(), verbose=0)
 
 print("MSE, MAE: ", res_mse, res_mae)
+
+# evaluate r-squared value to see how well-fit the features are
+y_predict = model.predict(X_test_scale, verbose=0)
+r2_score = r2_score(y_test, y_predict)
+print("R-squared score: ", r2_score)
 
 # plot train and validation mae over each epoch
 fig = plt.figure()
