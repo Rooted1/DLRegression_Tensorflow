@@ -9,6 +9,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras import layers
 from tensorflow.keras.optimizers.legacy import Adam
 import matplotlib.pyplot as plt
+from tensorflow.keras.callbacks import EarlyStopping
 
 ####### DATA PREPROCESSING
 
@@ -49,12 +50,13 @@ def design_model(features_set):
     return model
 
 # test fit model with epochs and batch_size
-epochs = 20
+epochs = 100
 batch_size = 5
 val_split = 0.3
 
 model = design_model(X_train_scale)
-history = model.fit(X_train_scale, y_train.to_numpy(), epochs=epochs, batch_size=batch_size, verbose=1, validation_split=val_split)
+earl_stop = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=20)
+history = model.fit(X_train_scale, y_train.to_numpy(), epochs=epochs, batch_size=batch_size, verbose=1, validation_split=val_split, callbacks=[earl_stop])
 res_mse, res_mae = model.evaluate(X_test_scale, y_test.to_numpy(), verbose=0)
 
 print("MSE, MAE: ", res_mse, res_mae)
