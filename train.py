@@ -1,11 +1,13 @@
 import pandas as pd
+import numpy as np
+
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.models import Sequential
 from tensorflow.keras import layers
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers.legacy import Adam
 
 ####### DATA PREPROCESSING
 
@@ -24,8 +26,9 @@ X_train, X_tests, y_train, y_test = train_test_split(features, labels, test_size
 # standardize features so that they have equal weights
 sc = StandardScaler()
 X_train_scale = sc.fit_transform(X_train)
-X_test_scale = sc.fit(X_tests)
+X_test_scale = sc.transform(X_tests)
 
+####### CREATE MODEL AND TRAIN
 
 # define neural network model
 def design_model(features_set):
@@ -43,3 +46,14 @@ def design_model(features_set):
     # compile model
     model.compile(loss='mse', metrics=['mae'], optimizer=opt)
     return model
+
+# test fit model with epochs and batch_size
+epochs = 20
+batch_size = 5
+val_split = 0.3
+
+model = design_model(X_train_scale)
+history = model.fit(X_train_scale, y_train.to_numpy(), epochs=epochs, batch_size=batch_size, verbose=1, validation_split=val_split)
+res_mse, res_mae = model.evaluate(X_test_scale, y_test.to_numpy(), verbose=0)
+
+print("MSE, MAE: ", res_mse, res_mae)
