@@ -8,6 +8,7 @@ from tensorflow import keras
 from tensorflow.keras.models import Sequential
 from tensorflow.keras import layers
 from tensorflow.keras.optimizers.legacy import Adam
+import matplotlib.pyplot as plt
 
 ####### DATA PREPROCESSING
 
@@ -57,3 +58,23 @@ history = model.fit(X_train_scale, y_train.to_numpy(), epochs=epochs, batch_size
 res_mse, res_mae = model.evaluate(X_test_scale, y_test.to_numpy(), verbose=0)
 
 print("MSE, MAE: ", res_mse, res_mae)
+
+# plot train and validation mae over each epoch
+fig = plt.figure()
+ax1 = fig.add_subplot(2, 1, 1)
+ax1.plot(history.history['mae'])
+ax1.plot(history.history['val_mae'])
+ax1.set_title('model mae')
+ax1.set_ylabel('MAE')
+ax1.set_xlabel('epoch')
+ax1.legend(['train', 'validation'], loc='upper right')
+
+# Plot loss and validation loss over each epoch
+ax2 = fig.add_subplot(2, 1, 2)
+ax2.plot(history.history['loss'])
+ax2.plot(history.history['val_loss'])
+ax2.set_title('model loss')
+ax2.set_ylabel('loss')
+ax2.set_xlabel('epoch')
+ax2.legend(['train', 'validation'], loc='upper right')
+plt.show()
